@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星森占い ✦ HOSHIMORI</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Cinzel:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0a0a1a;
+    --card: #0f0f2e;
+    --gold: #c9a84c;
+    --gold2: #f0d080;
+    --purple: #7b4fa6;
+    --purple2: #a66fd4;
+    --text: #e8e0f0;
+    --muted: #9088a8;
+    --border: rgba(201,168,76,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Serif JP', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Stars background */
+  #stars {
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at 20% 30%, #1a0a3a 0%, #0a0a1a 60%),
+                radial-gradient(ellipse at 80% 80%, #0a1a2a 0%, transparent 50%);
+  }
+  #stars::before, #stars::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 40% 10%, rgba(201,168,76,0.9) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 25%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 80% 45%, rgba(201,168,76,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 85%, rgba(166,111,212,0.9) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 5% 50%, rgba(201,168,76,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 80%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 15%, rgba(166,111,212,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 95% 35%, rgba(255,255,255,0.5) 0%, transparent 100%);
+    animation: twinkle 4s ease-in-out infinite alternate;
+  }
+  #stars::after {
+    background-image:
+      radial-gradient(1px 1px at 8% 30%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 60%, rgba(201,168,76,0.7) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 30% 20%, rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 75%, rgba(166,111,212,0.9) 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 78% 60%, rgba(201,168,76,0.6) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 88% 85%, rgba(255,255,255,0.7) 0%, transparent 100%);
+    animation-delay: 2s;
+  }
+  @keyframes twinkle {
+    0% { opacity: 0.6; } 100% { opacity: 1; }
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+  .header-emblem {
+    font-size: 48px; margin-bottom: 12px;
+    filter: drop-shadow(0 0 20px rgba(201,168,76,0.6));
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    color: var(--gold2);
+    letter-spacing: 4px;
+    text-shadow: 0 0 30px rgba(201,168,76,0.5);
+    margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+  }
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 16px auto; max-width: 300px;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1;
+    height: 1px; background: linear-gradient(to right, transparent, var(--gold));
+  }
+  .divider::after { background: linear-gradient(to left, transparent, var(--gold)); }
+  .divider span { color: var(--gold); font-size: 14px; }
+
+  /* Card */
+  .card {
+    background: linear-gradient(135deg, rgba(15,15,46,0.95), rgba(20,10,40,0.95));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,168,76,0.1);
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--border), transparent);
+  }
+
+  /* Form */
+  .form-row { margin-bottom: 20px; }
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  input, select, textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+  }
+  select { cursor: pointer; }
+  select option { background: #1a1a3a; }
+  textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+
+  .date-row { display: flex; gap: 10px; }
+  .date-row input { flex: 1; }
+
+  /* Button */
+  .btn-divine {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #7b4fa6, #4a2070);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 12px;
+    color: var(--gold2);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    letter-spacing: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-divine::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.15), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .btn-divine:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(123,79,166,0.5); }
+  .btn-divine:hover::before { opacity: 1; }
+  .btn-divine:active { transform: translateY(0); }
+  .btn-divine:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* Loading */
+  #loading { display: none; text-align: center; padding: 60px 20px; }
+  .crystal-ball {
+    font-size: 64px;
+    animation: pulse-glow 1.5s ease-in-out infinite;
+    margin-bottom: 24px;
+  }
+  @keyframes pulse-glow {
+    0%,100% { filter: drop-shadow(0 0 10px rgba(166,111,212,0.5)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 30px rgba(201,168,76,0.8)); transform: scale(1.08); }
+  }
+  .loading-text {
+    color: var(--muted); font-size: 14px; letter-spacing: 2px;
+    animation: fade-text 2s ease-in-out infinite;
+  }
+  @keyframes fade-text { 0%,100%{opacity:0.4} 50%{opacity:1} }
+  .loading-dots::after {
+    content: ''; animation: dots 1.5s infinite;
+  }
+  @keyframes dots {
+    0%{content:''}33%{content:'.'}66%{content:'..'}100%{content:'...'}
+  }
+
+  /* Result */
+  #result { display: none; }
+  .result-header {
+    text-align: center; margin-bottom: 28px;
+  }
+  .result-type {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--purple), #2a1050);
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    padding: 8px 24px;
+    font-size: 13px;
+    color: var(--gold2);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .result-content {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    line-height: 1.9;
+    font-size: 15px;
+    white-space: pre-wrap;
+    color: var(--text);
+  }
+  .result-content p { margin-bottom: 1em; }
+
+  .btn-copy {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    color: var(--gold);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 16px;
+  }
+  .btn-copy:hover { background: rgba(201,168,76,0.1); }
+
+  .btn-reset {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: var(--muted);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+  }
+  .btn-reset:hover { border-color: var(--muted); color: var(--text); }
+
+  .copy-toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: rgba(201,168,76,0.9); color: #0a0a1a;
+    padding: 10px 24px; border-radius: 30px;
+    font-size: 13px; letter-spacing: 1px;
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none; z-index: 100;
+  }
+  .copy-toast.show { opacity: 1; }
+
+  .footer {
+    text-align: center; margin-top: 40px;
+    color: var(--muted); font-size: 11px; letter-spacing: 2px;
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 24px 20px; }
+    .header h1 { font-size: 22px; }
+    .date-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div id="stars"></div>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-emblem">✦</div>
+    <h1>HOSHIMORI</h1>
+    <p class="subtitle">星森占い 鑑定システム</p>
+    <div class="divider"><span>✦</span></div>
+  </div>
+
+  <!-- Form -->
+  <div id="formSection">
+    <div class="card">
+      <div class="section-title">☽ 依頼者の情報</div>
+
+      <div class="form-row">
+        <label>生年月日</label>
+        <div class="date-row">
+          <input type="number" id="year" placeholder="年（例：1990）" min="1900" max="2025">
+          <input type="number" id="month" placeholder="月" min="1" max="12">
+          <input type="number" id="day" placeholder="日" min="1" max="31">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>性別</label>
+        <select id="gender">
+          <option value="">選択してください</option>
+          <option value="女性">女性</option>
+          <option value="男性">男性</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label>相談内容</label>
+        <textarea id="consultation" placeholder="例：仕事の適職、今後の恋愛運、今年の運気の流れなど、相談内容を入力してください"></textarea>
+      </div>
+    </div>
+
+    <button class="btn-divine" onclick="startDivination()">
+      ✦ 星森占いで鑑定する ✦
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading">
+    <div class="crystal-ball">🔮</div>
+    <p class="loading-text">星の声を聴いています<span class="loading-dots"></span></p>
+  </div>
+
+  <!-- Result -->
+  <div id="result">
+    <div class="card">
+      <div class="result-header">
+        <div class="result-type">✦ 星森鑑定結果 ✦</div>
+      </div>
+      <div class="section-title">☽ 鑑定文</div>
+      <div class="result-content" id="resultText"></div>
+    </div>
+    <button class="btn-copy" onclick="copyResult()">📋 LINEにコピーする</button>
+    <button class="btn-reset" onclick="resetForm()">↩ 新しい鑑定をする</button>
+  </div>
+
+  <div class="footer">© HOSHIMORI — 星森占い鑑定システム</div>
+</div>
+
+<div class="copy-toast" id="toast">コピーしました ✦</div>
+
+<script>
+async function startDivination() {
+  const year = document.getElementById('year').value;
+  const month = document.getElementById('month').value;
+  const day = document.getElementById('day').value;
+  const gender = document.getElementById('gender').value;
+  const consultation = document.getElementById('consultation').value;
+
+  if (!year || !month || !day || !gender || !consultation) {
+    alert('すべての項目を入力してください。');
+    return;
+  }
+
+  const birthdate = `${year}年${month}月${day}日`;
+
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('result').style.display = 'none';
+
+  const prompt = `あなたは一流の東洋占術家「星森占い」の専門家です。算命学・四柱推命・九星気学を組み合わせた独自の占い「星森占い」で鑑定してください。
+
+【依頼者情報】
+・生年月日：${birthdate}
+・性別：${gender}
+・相談内容：${consultation}
+
+【鑑定のルール】
+以下の3つの視点を必ず組み合わせて鑑定してください。
+
+1. 【算命学】による本質と宿命
+- 生年月日から陰陽五行・干支を読み解き、その人の本質的な性格・才能・隠れた宿命を解説する。
+- 十大主星や十二大従星のエッセンスを平易な言葉で伝える。
+
+2. 【四柱推命】による運勢とバイオリズム
+- 日干・通変星の概念をもとに、現在の大運・年運の流れを診断する。
+- 適職・才能・相性の良い環境についてアドバイスする。
+
+3. 【九星気学】による今年の運気
+- 本命星・月命星から今年（2025年）の運勢を占う。
+- 吉方位や具体的な開運行動があればアドバイスする。
+
+【出力スタイル】
+- 星ひとみのようにズバっと本質を突きつつ、シイタケ占いのように詩的でニュアンスある言葉遣いで。
+- 単に吉凶を言うだけでなく、依頼者が前向きに行動できる「建設的で寄り添う言葉遣い」で。
+- 専門用語は初心者でもわかるよう、簡単な例えを交えて解説する。
+- LINEで送りやすいよう、適切に改行・絵文字を使い、読みやすく整理する。
+- 最後に「星森型」として12型のいずれかに分類し、その型の名前と一言コメントを添える。
+
+それでは鑑定をお願いします。`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content.map(b => b.text || '').join('');
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('resultText').innerText = text;
+
+  } catch (err) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('formSection').style.display = 'block';
+    alert('鑑定中にエラーが発生しました。もう一度お試しください。');
+  }
+}
+
+function copyResult() {
+  const text = document.getElementById('resultText').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  });
+}
+
+function resetForm() {
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('formSection').style.display = 'block';
+  document.getElementById('year').value = '';
+  document.getElementById('month').value = '';
+  document.getElementById('day').value = '';
+  document.getElementById('gender').value = '';
+  document.getElementById('consultation').value = '';
+}
+</script>
+</body>
+</html>
